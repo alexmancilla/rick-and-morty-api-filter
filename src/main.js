@@ -83,9 +83,9 @@ class CharacterAPI {
 const apiUrl = "https://rickandmortyapi.com/api/character";
 const characterAPI = new CharacterAPI(apiUrl);
 
-// characterAPI.getAliveCharacters().then((aliveCharactersJSON) => {
-//     console.log(JSON.stringify(aliveCharactersJSON, null, 2));
-//   });
+characterAPI.getAliveCharacters().then((aliveCharactersJSON) => {
+    console.log(JSON.stringify(aliveCharactersJSON, null, 2));
+  });
 
 // characterAPI.countAliveCharacters().then((aliveCount) => {
 //   console.log("Total Alive Characters:", aliveCount);
