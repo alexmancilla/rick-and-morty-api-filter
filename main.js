@@ -1,7 +1,9 @@
 class Character {
-  constructor(name, status) {
+  constructor(id, name, status, gender) {
+    this.id = id;
     this.name = name;
     this.status = status;
+    this.gender = gender;
   }
 
   isAlive() {
@@ -21,7 +23,7 @@ class CharacterAPI {
         throw new Error(`Error: ${response.statusText}`);
       }
       const data = await response.json();
-      return data.results.map((item) => new Character(item.name, item.status));
+      return data.results.map(item => new Character(item.id, item.name, item.status, item.gender));
     } catch (error) {
       console.error("Error in fetching characters:", error);
       return [];
@@ -31,11 +33,10 @@ class CharacterAPI {
   async getAliveCharacters() {
     const characters = await this.fetchCharacters();
 
-    const aliveCharacters = characters
-      .filter((character) => character.isAlive())
-      .map((character) => ({ name: character.name, isAlive: true }));
+    const aliveCharacters = characters.filter(character => character.isAlive());
 
-    return aliveCharacters;
+    const modifiedNames = aliveCharacters.map(character => character.name.replace(/ /g, '_'));
+    return modifiedNames;
   }
     
     async countAliveCharacters() {
