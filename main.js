@@ -23,7 +23,9 @@ class CharacterAPI {
         throw new Error(`Error: ${response.statusText}`);
       }
       const data = await response.json();
-      return data.results.map(item => new Character(item.id, item.name, item.status, item.gender));
+      return data.results.map(
+        (item) => new Character(item.id, item.name, item.status, item.gender)
+      );
     } catch (error) {
       console.error("Error in fetching characters:", error);
       return [];
@@ -33,25 +35,35 @@ class CharacterAPI {
   async getAliveCharacters() {
     const characters = await this.fetchCharacters();
 
-    const aliveCharacters = characters.filter(character => character.isAlive());
+    const aliveCharacters = characters.filter((character) =>
+      character.isAlive()
+    );
 
-    const modifiedNames = aliveCharacters.map(character => character.name.replace(/ /g, '_'));
-    return modifiedNames;
+    const modifiedCharacters = aliveCharacters.map((character) => ({
+        id: character.id,
+        name: character.name.replace(/ /g, "_"),
+        status: character.status,
+        gender: character.gender
+      }));
+  
+      return {
+        results: modifiedCharacters
+      };
   }
-    
-    async countAliveCharacters() {
-        const aliveCharacters = await this.getAliveCharacters();
-        return aliveCharacters.length;
-      }
+
+  async countAliveCharacters() {
+    const aliveCharacters = await this.getAliveCharacters();
+    return aliveCharacters.length;
+  }
 }
 
 const apiUrl = "https://rickandmortyapi.com/api/character";
 const characterAPI = new CharacterAPI(apiUrl);
 
-characterAPI.getAliveCharacters().then((aliveCharacters) => {
-  console.log("Alive Characters:", aliveCharacters);
-});
+characterAPI.getAliveCharacters().then((aliveCharactersJSON) => {
+    console.log(JSON.stringify(aliveCharactersJSON, null, 2));
+  });
 
 characterAPI.countAliveCharacters().then((aliveCount) => {
-    console.log("Total Alive Characters:", aliveCount);
-  });
+  console.log("Total Alive Characters:", aliveCount);
+});
